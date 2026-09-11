@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -71,7 +71,7 @@
   --w-inset:56rem;
   --w-wide:76rem;
   --w-cinema:92rem;
-  --pad-y:clamp(4.5rem,9vw,10.5rem);
+  --pad-y:clamp(4rem,6.5vw,7.5rem);
   --rail-w:13.5rem;
 
   --sans:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
@@ -1059,6 +1059,8 @@ td.reserved{
   .process-line li{font-size:.63rem;line-height:1.3}
   .method-media figcaption,.activity-media-pair figcaption{font-size:.64rem}
 }
+.field.f-paper:not(.hero){padding-block:clamp(3.75rem,6vw,6.5rem)}
+#limits{padding-bottom:clamp(2.75rem,4vw,4.5rem)}
 </style>
 
 <style id="editorCss">
@@ -1350,7 +1352,7 @@ td.reserved{
 </section>
 </main>
 
-<footer class="field f-paper" style="padding-block:clamp(3rem,7vw,6rem)"><p class="text mono" style="color:var(--ink-soft)" data-eid="ef2">Birb Hangout · built and evaluated 2026 by Neerav Chaudhary</p></footer>
+<footer class="field f-paper" style="padding-block:clamp(2rem,4vw,3.5rem)"><p class="text mono" style="color:var(--ink-soft)" data-eid="ef2">Birb Hangout · built and evaluated 2026 by Neerav Chaudhary</p></footer>
 
 <script>
 (function () {
@@ -1358,7 +1360,7 @@ td.reserved{
   var root = document.documentElement;
   var KEY = "birb-hangout-about-theme";
 
-  /* ---- theme: system by default, explicit choice remembered ---- */
+  /* ---- theme: day by default, explicit choice remembered ---- */
   var stored = null;
   try { stored = localStorage.getItem(KEY); } catch (e) { stored = null; }
   if (stored === "light" || stored === "dark") root.setAttribute("data-theme", stored);
