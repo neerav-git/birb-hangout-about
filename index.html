@@ -306,10 +306,15 @@ hr{border:0;border-top:1px solid var(--field-rule);margin:0}
   padding-top:clamp(5rem,14vh,9rem);
   padding-bottom:clamp(4rem,10vh,7rem);
   overflow:hidden;
+  --field-fg:#17232b;--field-soft:#3f535e;--field-rule:rgba(23,35,43,.34);
+  background-image:linear-gradient(90deg,rgba(238,242,239,.96) 0%,rgba(238,242,239,.88) 30%,rgba(238,242,239,.48) 52%,rgba(238,242,239,.06) 76%),url("media/hero-dream-flight.png");
+  background-size:cover;
+  background-position:center center;
 }
 .hero__sky{
   position:absolute;inset:-8% -2% -2%;pointer-events:none;z-index:0;
   will-change:transform;
+  display:none;
 }
 .hero__sky svg{width:100%;height:100%;display:block}
 .hero__inner{position:relative;z-index:1;max-width:var(--w-wide);margin-inline:auto;width:100%}
@@ -320,15 +325,20 @@ hr{border:0;border-top:1px solid var(--field-rule);margin:0}
 }
 .eyebrow::before{content:"";width:2.2rem;height:1px;background:currentColor;opacity:.6;flex:none}
 .hero h1{
-  font-size:clamp(3.05rem,7.6vw,8.2rem);
+  font-size:clamp(3.05rem,6.5vw,7rem);
   font-weight:600;line-height:.98;letter-spacing:-.03em;
-  max-width:16ch;margin:0;
+  max-width:12ch;margin:0;
   text-wrap:balance;
 }
 .hero h1 em{font-style:normal;font-weight:300}
 .hero__stand{
-  margin:clamp(1.6rem,3.5vw,2.6rem) 0 0;max-width:var(--measure);
+  margin:clamp(1.35rem,2.7vw,2.15rem) 0 0;max-width:49ch;
   font-size:clamp(1.1rem,.5vw + 1rem,1.36rem);line-height:1.5;color:var(--field-fg);
+}
+@media(max-width:760px){
+  .hero{background-position:62% center;background-image:linear-gradient(180deg,rgba(238,242,239,.88) 0%,rgba(238,242,239,.76) 58%,rgba(238,242,239,.32) 100%),url("media/hero-dream-flight.png")}
+  .hero h1{max-width:11ch}
+  .hero__stand{max-width:38ch}
 }
 .hero__meta{
   margin-top:clamp(2.2rem,5vw,3.4rem);
