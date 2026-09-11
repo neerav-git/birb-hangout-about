@@ -1567,6 +1567,8 @@ td.reserved{
 
 <script id="editorJs">
 (function(){"use strict";
+  var localEditor=window.location.protocol==='file:'||window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1';
+  if(!localEditor)return;
   var root=document.documentElement, api=null, dirty=false, undo=[], open=null;
   var editableSelector='h1,h2,h3,h4,h5,h6,p,summary,figcaption,.activity-index__state,.activity-index__name,.activity-index__promise,.activity-video-note span,.hero__cue,.topbar__mark b,.topbar__suffix';
   var used={};
