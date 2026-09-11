@@ -1521,6 +1521,15 @@ td.reserved{
 <script id="editorJs">
 (function(){"use strict";
   var root=document.documentElement, api=null, dirty=false, undo=[], open=null;
+  var editableSelector='h1,h2,h3,h4,h5,h6,p,summary,figcaption,.activity-index__state,.activity-index__name,.activity-index__promise,.activity-video-note span,.hero__cue,.topbar__mark b,.topbar__suffix';
+  var used={};
+  document.querySelectorAll('[data-eid]').forEach(function(el){used[el.dataset.eid]=true;});
+  var autoIndex=1;
+  document.querySelectorAll(editableSelector).forEach(function(el){
+    if(el.closest('#edbar')||el.hasAttribute('data-eid'))return;
+    while(used['auto'+autoIndex])autoIndex++;
+    el.setAttribute('data-eid','auto'+autoIndex);used['auto'+autoIndex]=true;autoIndex++;
+  });
   var ORIG={}, ORIG_SLOT={};
   document.querySelectorAll('[data-eid]').forEach(function(el){ORIG[el.dataset.eid]=el.innerHTML;});
   document.querySelectorAll('.bleed-stage[data-slot]').forEach(function(el){ORIG_SLOT[el.dataset.slot]=el.innerHTML;});
@@ -1528,7 +1537,7 @@ td.reserved{
   var bar=document.createElement('div'); bar.id='edbar';
   bar.innerHTML='<button type="button" id="edToggle" aria-pressed="false">Edit</button>'+
     '<span class="sep"></span>'+
-    '<button type="button" id="edSave" disabled>&#10003; Save</button>'+
+    '<button type="button" id="edSave" disabled>&#10003; Save copy</button>'+
     '<button type="button" id="edUndo" disabled>Undo</button>'+
     '<button type="button" id="edReset">Reset</button>'+
     '<span class="msg" id="edMsg"></span>';
@@ -1546,7 +1555,7 @@ td.reserved{
     root.setAttribute('data-edit',on?'on':'off');
     bT.setAttribute('aria-pressed',String(on));bT.classList.toggle('on',on);
     bT.textContent=on?'Editing':'Edit';
-    say(on?'Click any text to open it in a box. Click a picture frame to attach an image.':'');
+    say(on?'Click any heading, paragraph, caption, or activity label to edit it.':'');
   });
 
   function grow(ta){ta.style.height='auto';ta.style.height=(ta.scrollHeight)+'px';}
@@ -1680,7 +1689,6 @@ td.reserved{
 
   bS.addEventListener('click',function(){
     if(open)closeField(true);
-    if(!api){say('This view cannot save.');return;}
     bS.disabled=true; say('Saving…',true);
     var c=document.documentElement.cloneNode(true);
     c.removeAttribute('data-edit');
@@ -1691,12 +1699,20 @@ td.reserved{
     c.querySelectorAll('[style*="display: none"],[style*="display:none"]').forEach(function(x){
       if(x.hasAttribute('data-eid'))x.style.display='';
     });
-    api.publish('<!doctype html>\n'+c.outerHTML).then(function(){
+    var source='<!doctype html>\n'+c.outerHTML;
+    if(!api){
+      var blob=new Blob([source],{type:'text/html;charset=utf-8'});
+      var url=URL.createObjectURL(blob),a=document.createElement('a');
+      a.href=url;a.download='birb-hangout-tour-editable.html';
+      document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+      dirty=false;undo=[];bU.disabled=true;say('Editable HTML copy downloaded.');return;
+    }
+    api.publish(source).then(function(){
       dirty=false;undo=[];bU.disabled=true;say('Saved.');
     }).catch(function(err){
       var code=err&&err.code;
       if(code==='conflict'){say('Someone saved first — reloading.',true);return;}
-      if(code==='not_writer'||code==='not_granted'||code==='not_declared'){bar.remove();return;}
+      if(code==='not_writer'||code==='not_granted'||code==='not_declared'){api=null;bS.disabled=false;say('Publishing is unavailable. Press Save copy again to download the HTML.');return;}
       if(code==='too_large'){say('Too large to save — use a smaller image.');bS.disabled=false;return;}
       say('Could not save. Try again.');bS.disabled=false;
     });
@@ -1705,8 +1721,8 @@ td.reserved{
   window.addEventListener('beforeunload',function(e){if(dirty){e.preventDefault();e.returnValue='';}});
 
   if(window.claude&&claude.use){
-    claude.use('artifact').then(function(a){api=a;if(!a)bar.remove();}).catch(function(){bar.remove();});
-  } else { bar.remove(); }
+    claude.use('artifact').then(function(a){api=a||null;}).catch(function(){api=null;});
+  }
 })();
 </script>
 <script>
