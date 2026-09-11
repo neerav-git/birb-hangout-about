@@ -1064,13 +1064,16 @@ td.reserved{
 .edfield{position:relative;margin:0}
 .edfield textarea{
   display:block;width:100%;box-sizing:border-box;
-  font:inherit;color:inherit;letter-spacing:inherit;line-height:inherit;
-  background:color-mix(in srgb,var(--blueberry) 9%,var(--field-bg,var(--paper)));
+  font:inherit;color:#17212b!important;-webkit-text-fill-color:#17212b;
+  caret-color:#245fda;color-scheme:light;opacity:1;
+  letter-spacing:inherit;line-height:inherit;
+  background:#fffdf8!important;
   border:2px solid var(--blueberry);border-radius:3px;
   padding:.35em .5em;margin:-.35em -.5em;
   resize:vertical;overflow:hidden;min-height:2.2em;
+  box-shadow:0 8px 28px rgba(12,22,35,.18);
 }
-.edfield textarea:focus{outline:none}
+.edfield textarea:focus{outline:3px solid rgba(77,139,255,.28);outline-offset:1px}
 .edfield .edacts{
   display:flex;gap:.35rem;justify-content:flex-end;margin-top:.5rem;
 }
