@@ -16,6 +16,7 @@ The public derivatives are 960×540 H.264 files with all audio tracks removed. C
 | `clips/islands.mp4` | dream entry and flight.mov | 00:41–00:52 | Removed | Floating-island approach |
 | `clips/exploration.mp4` | dream entry and flight.mov | 00:52–01:04 | Removed | Low-altitude river route |
 | `clips/reading.mp4` | reading books together.mov | 00:16–00:28 | Removed | Reading an open book |
+| `clips/bookshelf-selection.mp4` | reading books together.mov | 00:07.5–00:18 | Removed | Approaching the bookshelf, choosing a title, and sitting down to read |
 
 The supplied Dream capture is intentionally divided into purpose-specific editorial assets. `dream-entry` stays with the threshold, `flight` foregrounds movement, `islands` isolates a landmark approach, and `exploration` follows the lower river route. Posters are extracted from reviewed frames rather than generic placeholders.
 
