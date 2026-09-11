@@ -1,0 +1,21 @@
+/* Self-hosted variable fonts for the thesis site.
+   Fraunces and Manrope are SIL Open Font License 1.1; OFL-Fraunces.txt and
+   OFL-Manrope.txt in this directory are the licence texts that must travel
+   with the font files. Latin subset only — see MEDIA-SPEC.md if the article
+   ever needs latin-ext or another script. */
+
+@font-face {
+  font-family: "Fraunces";
+  src: url("./Fraunces-Variable-latin.woff2") format("woff2");
+  font-weight: 100 900;          /* variable axis range */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("./Manrope-Variable-latin.woff2") format("woff2");
+  font-weight: 200 800;          /* variable axis range */
+  font-style: normal;
+  font-display: swap;
+}
