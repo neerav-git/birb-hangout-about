@@ -237,7 +237,7 @@ hr{border:0;border-top:1px solid var(--field-rule);margin:0}
 }
 .topbar{
   position:sticky;top:0;z-index:100;
-  display:flex;align-items:center;gap:1rem;justify-content:space-between;
+  display:grid;grid-template-columns:minmax(11rem,1fr) auto minmax(11rem,1fr);align-items:center;gap:1rem;
   padding:.55rem var(--gutter);
   background:var(--field-bg);
   color:var(--field-fg);
@@ -252,7 +252,24 @@ hr{border:0;border-top:1px solid var(--field-rule);margin:0}
   min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 .topbar__mark b{font-weight:700}
-.topbar__right{display:flex;align-items:center;gap:.4rem;flex:none}
+.topbar__nav{display:flex;align-items:stretch;justify-content:center;gap:clamp(.7rem,1.4vw,1.3rem);min-width:0}
+.topbar__nav a{
+  position:relative;display:inline-flex;align-items:center;min-height:44px;white-space:nowrap;
+  color:var(--field-soft);text-decoration:none;
+  font:650 .66rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;
+}
+.topbar__nav a::after{content:"";position:absolute;left:0;right:0;bottom:.28rem;height:1px;background:currentColor;transform:scaleX(0);transition:transform .18s ease}
+.topbar__nav a:hover,.topbar__nav a:focus-visible,.topbar__nav a[aria-current="true"]{color:var(--field-fg)}
+.topbar__nav a[aria-current="true"]::after{transform:scaleX(1)}
+.topbar__right{display:flex;align-items:center;justify-self:end;gap:.4rem;flex:none}
+section[id]{scroll-margin-top:5rem}
+@media (max-width:1100px){
+  .topbar{grid-template-columns:minmax(0,1fr) auto;gap:.15rem .75rem;padding-bottom:0}
+  .topbar__nav{grid-column:1/-1;grid-row:2;justify-content:flex-start;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:none;margin-inline:calc(var(--gutter) * -1);padding-inline:var(--gutter)}
+  .topbar__nav::-webkit-scrollbar{display:none}
+  .topbar__nav a{min-height:38px}
+  section[id]{scroll-margin-top:7rem}
+}
 @media (max-width:520px){
   .topbar{gap:.5rem}
   .topbar__suffix{display:none}
@@ -1159,9 +1176,18 @@ section.field:has(>details.drawer:last-child)+section.field{padding-top:clamp(1.
 
 <header class="topbar">
   <a class="topbar__mark" href="#top"><b>Birb&nbsp;Hangout</b><span class="topbar__suffix">&nbsp;·&nbsp;About</span></a>
+  <nav class="topbar__nav" aria-label="Page sections">
+    <a href="#top">Intro</a>
+    <a href="#activities">Activities</a>
+    <a href="#philosophy">Philosophy</a>
+    <a href="#records">Lounge</a>
+    <a href="#fireside">Dream</a>
+    <a href="#method">Development</a>
+    <a href="#limits">Next</a>
+  </nav>
   <div class="topbar__right">
-    <button class="tbtn" type="button" id="themeBtn" title="Theme: system. Activate for day.">
-      <span class="tbtn__dot" aria-hidden="true"></span><span class="vh">Theme:&nbsp;</span><span id="themeLabel" aria-live="polite">System</span>
+    <button class="tbtn" type="button" id="themeBtn" title="Theme: day. Activate for night.">
+      <span class="tbtn__dot" aria-hidden="true"></span><span class="vh">Theme:&nbsp;</span><span id="themeLabel" aria-live="polite">Day</span>
     </button>
   </div>
 </header>
@@ -1468,11 +1494,31 @@ section.field:has(>details.drawer:last-child)+section.field{padding-top:clamp(1.
     return !section.closest("[hidden]");
   });
   var railLinks = Array.prototype.slice.call(document.querySelectorAll(".rail a"));
+  var topbarLinks = Array.prototype.slice.call(document.querySelectorAll(".topbar__nav a"));
+  var activeNavHref = "";
+  var navChapter = {
+    top:"top", origin:"top", activities:"activities", philosophy:"philosophy",
+    records:"records", reading:"records", watching:"records", "social-play":"records",
+    fireside:"fireside", flight:"fireside", exploration:"fireside",
+    method:"method", limits:"limits"
+  };
   function markRail(id) {
     for (var i = 0; i < railLinks.length; i++) {
       var on = railLinks[i].getAttribute("href") === "#" + id;
       if (on) railLinks[i].setAttribute("aria-current", "true");
       else railLinks[i].removeAttribute("aria-current");
+    }
+    var chapter = navChapter[id] || id;
+    for (var j = 0; j < topbarLinks.length; j++) {
+      var current = topbarLinks[j].getAttribute("href") === "#" + chapter;
+      if (current) {
+        topbarLinks[j].setAttribute("aria-current", "page");
+        if (window.innerWidth <= 1100 && activeNavHref !== topbarLinks[j].getAttribute("href")) {
+          topbarLinks[j].scrollIntoView({ behavior:"smooth", block:"nearest", inline:"center" });
+        }
+        activeNavHref = topbarLinks[j].getAttribute("href");
+      }
+      else topbarLinks[j].removeAttribute("aria-current");
     }
   }
   if ("IntersectionObserver" in window && sections.length) {
